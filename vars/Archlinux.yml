@@ -2,11 +2,16 @@
 # vars file for alexkross.ca-certificates
 
 #
-# Defaults for RedHat-based Linux systems
+# Defaults for Archlinux-based systems
 #
 
+# Packages to be installed.
+ca_certificates_packages:
+  - ca-certificates-utils
+  - ca-certificates
+
 # Directory where certificates should be placed
-ca_certificates_path: /etc/pki/ca-trust/source/anchors
+ca_certificates_path: /etc/ca-certificates/trust-source/anchors
 
 # Command to run after adding new certificates
 ca_certificates_handler: /usr/bin/update-ca-trust extract

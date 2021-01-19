@@ -1,5 +1,5 @@
 ---
-# defaults file for arillso.ca-certificates
+# defaults file for alexkross.ca-certificates
 
 # Location where the certificates are stored under windows before
 # they are imported into the certificate memory of Windows.

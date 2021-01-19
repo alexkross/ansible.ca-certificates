@@ -1,15 +1,13 @@
 # Ansible Role: ca-certificates
 
-[![Build Status](https://img.shields.io/travis/arillso/ansible.ca-certificates.svg?branch=master&style=popout-square)](https://travis-ci.org/arillso/ansible.ca-certificates) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=popout-square)](https://sbaerlo.ch/licence) [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-ca_certificates-blue.svg?style=popout-square)](https://galaxy.ansible.com/arillso/ca_certificates) [![Ansible Role](https://img.shields.io/ansible/role/d/42098.svg?style=popout-square)](https://galaxy.ansible.com/arillso/ca_certificates)
-
 ## Description
 
-Ansible role to manage CA certificates in the Linux and Windows system trust store. It's possible to add PEM formatted certificates from the local file system, a already trusted HTTP(s) URL, from raw content.
+Ansible role originated from arillso.ca_certificates to manage CA certificates in the Linux and Windows system trust store. It's possible to add PEM formatted certificates from the local file system, a already trusted HTTP(s) URL, from raw content.
 
 ## Installation
 
 ```bash
-ansible-galaxy install arillso.ca_certificates
+git clone https://github.com/alexkross/ansible.ca-certificates.git alexkross.ca-certificates
 ```
 
 ## Requirements
@@ -59,14 +57,30 @@ None
 ## Example Playbook
 
 ```yml
-- hosts: all
+---
+- hosts: archlinux:centos:!luna-1v
+  gather_facts: yes
+  tasks:
+  - name: Convert *.crt (DER) to *.pem ignoring errors
+    local_action: command openssl x509 -in {{ item }} -inform der -out {{ basename }}.pem -outform pem
+    vars:
+      basename: '{{ item | splitext | first }}'
+    with_fileglob: files/*.cer
+    run_once: true
+    ignore_errors: true
   roles:
-    - arillso.ca_certificates
+  - role: alexkross.ca-certificates
+    vars:
+      ca_name_mark: _root_
+      files: '{{ lookup("fileglob", "*.pem").split(",") | map("basename") | list }}'
+      names: "{{ files | map('regex_replace', '^(.*)'~ca_name_mark~'.+$', '\\1') | list }}"
+      ca_certificates_files: '{{ dict(names | zip(files)) | dict2items(key_name="name", value_name="file") }}'
 ```
 
 ## Author
 
 - [Simon Bärlocher](https://sbaerlocher.ch)
+- [Alexander Kross](mailto:Alexander.Kross@gmail.com)
 
 ## License
 
@@ -75,3 +89,4 @@ This project is under the MIT License. See the [LICENSE](https://sbaerlo.ch/lice
 ## Copyright
 
 (c) 2020, Arillso
+(c) 2021, AlexKross

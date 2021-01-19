@@ -30,4 +30,4 @@
           -----END CERTIFICATE-----
 
   roles:
-    - role: arillso.ca-certificates
+    - role: alexkross.ca-certificates
