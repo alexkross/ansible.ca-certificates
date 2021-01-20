@@ -7,7 +7,7 @@
 
 # Packages to be installed.
 ca_certificates_packages:
-  - ca-certificates-utils
+  - ca-certificates-utils # incl. p11-kit
   - ca-certificates
 
 # Directory where certificates should be placed

@@ -71,7 +71,7 @@ None
   roles:
   - role: alexkross.ca-certificates
     vars:
-      ca_name_mark: _root_
+      ca_name_mark: _root_ # should include serial
       files: '{{ lookup("fileglob", "*.pem").split(",") | map("basename") | list }}'
       names: "{{ files | map('regex_replace', '^(.*)'~ca_name_mark~'.+$', '\\1') | list }}"
       ca_certificates_files: '{{ dict(names | zip(files)) | dict2items(key_name="name", value_name="file") }}'

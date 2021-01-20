@@ -7,3 +7,5 @@
     - '{{ ca_certificates_files }}'
   loop_control:
     loop_var: ca_certificates_loop_install_item
+  tags:
+    - configuration
